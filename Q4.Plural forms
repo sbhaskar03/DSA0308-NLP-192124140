@@ -15,9 +15,8 @@ class PluralFiniteStateMachine:
         elif self.state == 'Singular':
             return word + 's'
 
-# Example Usage
 fsm = PluralFiniteStateMachine()
-print(fsm.transition('cat'))  # Output: cats
-print(fsm.transition('box'))  # Output: boxes
-print(fsm.transition('apple'))  # Output: apples
-print(fsm.transition('city'))  # Output: cities
+print(fsm.transition('cat'))  
+print(fsm.transition('box'))  
+print(fsm.transition('apple')) 
+print(fsm.transition('city'))  
