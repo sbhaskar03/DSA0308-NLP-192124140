@@ -1,0 +1,18 @@
+def match_ab(string):
+    state = 'q0'
+    
+    for char in string:
+        if state == 'q0' and char == 'a':
+            state = 'q1'
+        elif state == 'q1' and char == 'b':
+            state = 'q2'
+        else:
+            state = 'q0'
+    return state == 'q2'
+
+test_strings = ['ab', 'aab']
+for test_string in test_strings:
+     if match_ab(test_string):
+        print(f"'{test_string}' matches.")
+     else:
+        print(f"'{test_string}' does not match.")
