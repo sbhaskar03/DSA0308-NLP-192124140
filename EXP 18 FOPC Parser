@@ -1,0 +1,42 @@
+class FOPC_Parser:
+    def _init_(self):
+        self.constants = set()
+        self.predicates = set()
+        self.variables = set()
+
+    def parse_expression(self, expression):
+        # Split the expression into tokens
+        tokens = expression.split()
+
+        # Parse each token
+        for token in tokens:
+            # If token starts with an uppercase letter, it's a constant
+            if token[0].isupper():
+                self.constants.add(token)
+            # If token is enclosed in parentheses and contains uppercase letter(s), it's a predicate
+            elif '(' in token and ')' in token and any(char.isupper() for char in token):
+                predicate = token.split('(')[0]
+                self.predicates.add(predicate)
+                args = token.split('(')[1].split(')')[0].split(',')
+                self.variables.update(args)
+            # Otherwise, it's a variable
+            else:
+                self.variables.add(token)
+
+    def display_constants(self):
+        print("Constants:", ', '.join(self.constants))
+
+    def display_predicates(self):
+        print("Predicates:", ', '.join(self.predicates))
+
+    def display_variables(self):
+        print("Variables:", ', '.join(self.variables))
+
+
+# Example usage
+parser = FOPC_Parser()
+expression = input("Enter a logical expression: ")
+parser.parse_expression(expression)
+parser.display_constants()
+parser.display_predicates()
+parser.display_variables()
