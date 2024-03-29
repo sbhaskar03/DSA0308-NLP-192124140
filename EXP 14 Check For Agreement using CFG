@@ -1,0 +1,58 @@
+import nltk
+
+def check_agreement(grammar, sentence):
+    parser = nltk.ChartParser(grammar)
+    tokens = nltk.word_tokenize(sentence)
+    for tree in parser.parse(tokens):
+        return check_agreement_in_tree(tree)
+
+def check_agreement_in_tree(tree):
+    subject = None
+    verb = None
+    for subtree in tree.subtrees():
+        if subtree.label() == 'NP':
+            subject = get_head_noun(subtree)
+        elif subtree.label() == 'VP':
+            verb = get_head_verb(subtree)
+    if subject and verb:
+        if subject[1] == 'singular' and verb[1] == 'singular':
+            return "Agreement: Singular"
+        elif subject[1] == 'plural' and verb[1] == 'plural':
+            return "Agreement: Plural"
+        else:
+            return "Disagreement: Number Mismatch"
+    else:
+        return "Unable to determine agreement"
+
+def get_head_noun(subtree):
+    for word, tag in subtree.pos():
+        if tag.startswith('N'):
+            return (word, 'singular' if tag.endswith('S') else 'plural')
+
+def get_head_verb(subtree):
+    for word, tag in subtree.pos():
+        if tag.startswith('V'):
+            return (word, 'singular' if tag.endswith('S') else 'plural')
+
+# Example usage:
+if __name__ == "__main__":
+    # Example grammar
+    grammar = nltk.CFG.fromstring("""
+        S -> NP VP
+        DT -> 'the' | 'The'
+        VP -> V NP
+        NP -> 'dog' | 'dogs' | 'cat' | 'cats' | 'John' | 'Mary'
+        V -> 'chase' | 'chases'
+    """)
+
+    sentences = [
+        "the dog chases the cat",
+        "the dogs chase the cats",
+        "the dog chase the cat",
+        "the dogs chases the cat"
+    ]
+
+    for sentence in sentences:
+        print(sentence)
+        print(check_agreement(grammar, sentence))
+        print()
